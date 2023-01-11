@@ -14,6 +14,10 @@ namespace MakeGenrePlaylist
 {
     public static class XmlHelper
     {
+        /// <summary>Creates a music play list file.</summary>
+        /// <param name="name">The name of the play list.</param>
+        /// <param name="filePath">The file's full pathname.</param>
+        /// <param name="musicFiles">The list of music files to include in the play list.</param>
         public static void CreatePlaylist(string name, string filePath, ArrayList musicFiles)
         {
             using (FileStream fs = new FileStream(filePath, FileMode.Create))
@@ -37,8 +41,8 @@ namespace MakeGenrePlaylist
                         writer.Write($"albumArtist=\"{Escape(FileHelper.GetExtendedFileProperty(file, "Contributing artists"))}\" ");
                         writer.Write($"trackTitle=\"{Escape(FileHelper.GetExtendedFileProperty(file, "Title"))}\" ");
                         writer.Write($"trackArtist=\"{Escape(FileHelper.GetExtendedFileProperty(file, "Authors"))}\" ");
-                        string lengthInTime = FileHelper.GetExtendedFileProperty(file, "Length");
-                        TimeSpan timeSpan = TimeSpan.ParseExact(lengthInTime, @"hh\:mm\:ss", CultureInfo.InvariantCulture);
+                        string length = FileHelper.GetExtendedFileProperty(file, "Length");
+                        TimeSpan timeSpan = TimeSpan.ParseExact(length, @"hh\:mm\:ss", CultureInfo.InvariantCulture);
                         writer.Write($"duration=\"{timeSpan.TotalMilliseconds}\" ");
                         writer.WriteLine("/>");
                     }
@@ -50,9 +54,19 @@ namespace MakeGenrePlaylist
             }
         }
 
+        /// <summary>
+        ///   <para>
+        /// Escapes the specified string
+        /// </summary>
+        /// <param name="str">The string to escape.</param>
+        /// <returns>The string with the escape sequences.</returns>
         private static string Escape(string str)
         {
-            string escapeStr = str.Replace("\"", "'").Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("&#34;", "&quot;").Replace("'", "&apos;");
+            string escapeStr = str.Replace("&", "&amp;")
+                                  .Replace("<", "&lt;")
+                                  .Replace(">", "&gt;")
+                                  .Replace("'", "&apos;")
+                                  .Replace("\"", "&quot;");
             return escapeStr;
         }
     }

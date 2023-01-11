@@ -10,6 +10,13 @@ namespace MakeGenrePlaylist
 {
     public static class FileHelper
     {
+        /// <summary>Gets a list of files by a specific search pattern.</summary>
+        /// <param name="filePath">The folder in which to search for files.</param>
+        /// <param name="searchPattern">The search pattern.  Multiple patterns are separated by the '|' character.</param>
+        /// <param name="searchOption">The <see cref="SearchOption"/>.</param>
+        /// <returns>
+        /// An <see cref="ArrayList" of the files matching the search pattern(s)./>
+        /// </returns>
         public static ArrayList GetFilesBySearchPattern(string filePath, string searchPattern, SearchOption searchOption)
         {
             if (string.IsNullOrEmpty(searchPattern))
@@ -46,7 +53,11 @@ namespace MakeGenrePlaylist
             //Method to load and execute the Shell object for Windows server 8 environment otherwise you get "Unable to cast COM object of type 'System.__ComObject' to interface type 'Shell32.Shell'"
             Type shellAppType = Type.GetTypeFromProgID("Shell.Application");
             Object shell = Activator.CreateInstance(shellAppType);
-            Shell32.Folder shellFolder = (Shell32.Folder)shellAppType.InvokeMember("NameSpace", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object[] { baseFolder });
+
+            Shell32.IShellDispatch ishell = (Shell32.IShellDispatch)shell;
+            Shell32.Folder shellFolder = ishell.NameSpace(baseFolder);
+
+            //Shell32.Folder shellFolder = (Shell32.Folder)shellAppType.InvokeMember("NameSpace", System.Reflection.BindingFlags.InvokeMethod, null, shell, new object[] { baseFolder });
 
             //ParseName will find the specific file I'm looking for in the Shell32.Folder object
             Shell32.FolderItem folderitem = shellFolder.ParseName(fileName);
