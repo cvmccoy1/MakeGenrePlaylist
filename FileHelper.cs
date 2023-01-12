@@ -33,9 +33,15 @@ namespace MakeGenrePlaylist
             return arrLstFiles;
         }
 
+        /// <summary>Contains a list of only the Property Name to be stored.</summary>
         private static List<string> storedProperties;
 
-        public static List<Dictionary<string, string>> GetFilesByProperty(ArrayList files, string fileProperty, string filePropertyValue)
+        /// <summary>Gets a list of files containing file properties.  The list only contains those files that have a specific property's value.</summary>
+        /// <param name="files">A list of pathnames to search through.</param>
+        /// <param name="fileProperty">The file property name being searched for.</param>
+        /// <param name="filePropertyValue">The value that property must contain to be include in the returned list of files.</param>
+        /// <returns>A list of files whose specific property name is set to the specified value.</returns>
+        public static List<Dictionary<string, string>> GetFilePropertiesBySpecificProperty(ArrayList files, string fileProperty, string filePropertyValue)
         {
             List<Dictionary<string, string>> list = new List<Dictionary<string, string>>();
             storedProperties = new List<string>()

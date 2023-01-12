@@ -55,7 +55,6 @@ namespace MakeGenrePlaylist
                             writer.WriteLine("/>");
                         }
                     }
-
                     writer.WriteLine("\t\t</seq>");
                     writer.WriteLine("\t</body>");
                     writer.WriteLine("</smil>");

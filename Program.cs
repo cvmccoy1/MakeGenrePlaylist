@@ -26,7 +26,7 @@ namespace MakeGenrePlaylist
             Console.WriteLine($"Found {musicFiles.Count} Files!");
 
             Console.Write($"Finding All {filePropertyValue} Files...");
-            List<Dictionary<string, string>> genreFiles = FileHelper.GetFilesByProperty(musicFiles, fileProperty, filePropertyValue);
+            List<Dictionary<string, string>> genreFiles = FileHelper.GetFilePropertiesBySpecificProperty(musicFiles, fileProperty, filePropertyValue);
             Console.WriteLine($"Found {genreFiles.Count} Files!");
 
             Console.Write("Creating Play List File...");
