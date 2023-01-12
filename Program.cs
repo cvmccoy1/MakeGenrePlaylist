@@ -17,12 +17,15 @@ namespace MakeGenrePlaylist
                 throw new ArgumentNullException(nameof(args));
             }
             const string path = @"\\MCCOY-NAS\Public\All Family Stuff\Vana's Music\";
-            const string searchPattern = "*.m4a|*.mp3|*.mp4|*.wav|*.wma|*.aac";
+            List<string> searchExt = new List<string>()
+            {
+                ".m4a", ".mp3",  ".mp4", ".wav", ".wma", ".aac"
+            };
             const string fileProperty = "Genre";
             const string filePropertyValue = "Romance";
 
             Console.Write("Finding All Music Files...");
-            ArrayList musicFiles = FileHelper.GetFilesBySearchPattern(path, searchPattern, SearchOption.AllDirectories);
+            ArrayList musicFiles = FileHelper.GetFilesBySearchPattern(path, searchExt);
             Console.WriteLine($"Found {musicFiles.Count} Files!");
 
             Console.Write($"Finding All {filePropertyValue} Files...");

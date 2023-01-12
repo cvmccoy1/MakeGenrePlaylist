@@ -10,25 +10,34 @@ namespace MakeGenrePlaylist
 {
     public static class FileHelper
     {
-        /// <summary>Gets a list of files by a specific search pattern.</summary>
+        /// <summary>Gets a list of files by a specific list of file extensions.</summary>
         /// <param name="filePath">The folder in which to search for files.</param>
-        /// <param name="searchPattern">The search pattern.  Multiple patterns are separated by the '|' character.</param>
-        /// <param name="searchOption">The <see cref="SearchOption"/>.</param>
+        /// <param name="searchExt">List of file extensions to search for.</param>
         /// <returns>
-        /// An <see cref="ArrayList" of the files matching the search pattern(s)./>
+        /// An <see cref="ArrayList" of the files matching the list of file extensions./>
         /// </returns>
-        public static ArrayList GetFilesBySearchPattern(string filePath, string searchPattern, SearchOption searchOption)
+        public static ArrayList GetFilesBySearchPattern(string filePath, List<string> searchExt)
         {
-            if (string.IsNullOrEmpty(searchPattern))
-                return null;
-
-            string[] arrExt = searchPattern.Split('|');
             ArrayList arrLstFiles = new ArrayList();
-            for (int i = 0; i < arrExt.Length; i++)
+            try
             {
-                Console.Write($"{arrLstFiles.Count,-6}");
-                arrLstFiles.AddRange(Directory.GetFiles(filePath, arrExt[i], searchOption));
-                Console.Write("\b\b\b\b\b\b");
+                foreach (string directory in Directory.GetDirectories(filePath))
+                {
+                    foreach (string file in Directory.GetFiles(directory))
+                    {
+                        if (searchExt.Contains(Path.GetExtension(file).ToLowerInvariant()))
+                        {
+                            Console.Write($"{arrLstFiles.Count+1,-6}");
+                            arrLstFiles.Add(file);
+                            Console.Write("\b\b\b\b\b\b");
+                        }
+                    }
+                    arrLstFiles.AddRange(GetFilesBySearchPattern(directory, searchExt));
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                Console.WriteLine(excpt.Message);
             }
             return arrLstFiles;
         }
